@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import {
   Container,
   Content,
@@ -12,7 +13,7 @@ import {
 } from 'native-base';
 import PropTypes from 'prop-types';
 import AsyncImage from '../components/AsyncImage';
-import {Dimensions} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {mediaURL} from '../constants/urlConst';
 import {Video} from 'expo-av';
 import {fetchGET} from '../hooks/APIHooks';
@@ -38,7 +39,6 @@ const Single = (props) => {
   useEffect(() => {
     getUser();
   }, []);
-
 
   return (
     <Container>
@@ -72,22 +72,73 @@ const Single = (props) => {
               )
             }
           </CardItem>
+        </Card>
+        <Card>
           <CardItem>
             <Left>
-              <Icon name='image'/>
+              <Icon name='car'/>
               <Body>
-                <H3>{file.title}</H3>
-                <Text>{file.description}</Text>
-                <Text>By {user.username}</Text>
+                <H3 style={styles.title}>{file.title}</H3>
+                <Text style={styles.subtitle2}>{JSON.parse(file.description).location}</Text>
               </Body>
             </Left>
+          </CardItem>
+        </Card>
+        <Card>
+          <CardItem>
+            <Body>
+              <Text style={styles.subtitle}>{JSON.parse(file.description).description}</Text>
+              <Text>Price: {JSON.parse(file.description).price} €</Text>
+              <Text>Contact: {user.email}</Text>
+            </Body>
           </CardItem>
         </Card>
       </Content>
     </Container>
   );
 };
+const styles = StyleSheet.create({
+  // wrapContainer: {
+  //   width: (width - 40) * 0.48,
+  //   marginVertical: 5,
+  // },
+  columnContainer: {
+    marginVertical: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    paddingVertical: 3,
+  },
+  subtitle: {
+    fontSize: 14,
+    fontWeight: "700",
+    paddingVertical: 3
+  },
+  subtitle2: {
+    fontSize: 16,
+    paddingVertical: 3,
+    fontWeight: "600",
+    color: "#9E6969"
+  },
+  bottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 3,
+    alignContent: "flex-start"
 
+  },
+  bottomLeft: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  buttonContainer: {
+    position: "absolute",
+    zIndex: 4,
+    borderWidth: 0.4,
+    opacity: 1,
+  }
+});
 Single.propTypes = {
   navigation: PropTypes.object,
   file: PropTypes.object,
