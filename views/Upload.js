@@ -32,9 +32,11 @@ const Upload = (props) => {
     const {
         handleTitleChange,
         handleDescriptionChange,
-        handleUpload,
         handlePriceChange,
         handleLocationChange,
+        handleUpload,
+        description,
+        resetDescription,
         inputs,
         errors,
         setErrors,
@@ -62,6 +64,7 @@ const Upload = (props) => {
         setErrors({});
         setInputs({});
         setImage(null);
+        resetDescription(description);
     };
 
     const getPermissionAsync = async () => {

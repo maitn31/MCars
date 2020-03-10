@@ -1,11 +1,18 @@
 import {useState} from 'react';
 import {AsyncStorage} from 'react-native';
-import {fetchFormData, fetchPUT, getAllMedia, getUserMedia, fetchPOST} from './APIHooks';
+import {fetchFormData, fetchPOST, fetchPUT, getAllMedia, getUserMedia} from './APIHooks';
 
 const useUploadForm = () => {
+  const [description, setDescription] = useState({});
   const [inputs, setInputs] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const resetDescription = (object) => {
+    object.description = "";
+    object.location = "";
+    object.price = "";
+  }
 
   const handleTitleChange = (text) => {
     setInputs((inputs) =>
@@ -16,26 +23,42 @@ const useUploadForm = () => {
   };
 
   const handleDescriptionChange = (text) => {
-    setInputs((inputs) =>
-      ({
-        ...inputs,
-        description: text,
-      }));
-  };
 
-  const handleLocationChange = (text) => {
+    setDescription((description)=>
+        ({
+          ...description,
+          description: text,
+        }))
     setInputs((inputs) =>
         ({
           ...inputs,
+          description : description
+        }));
+  };
+
+  const handleLocationChange = (text) => {
+    setDescription((description)=>
+        ({
+          ...description,
           location: text,
+        }))
+    setInputs((inputs) =>
+        ({
+          ...inputs,
+          description : description
         }));
   };
 
   const handlePriceChange = (text) => {
+    setDescription((description)=>
+        ({
+          ...description,
+          price: text,
+        }))
     setInputs((inputs) =>
         ({
           ...inputs,
-          price: text,
+          description : description
         }));
   };
 
@@ -48,13 +71,12 @@ const useUploadForm = () => {
       type = 'image/jpeg';
     }
 
+    const jDescription = JSON.stringify(description);
+
     const fd = new FormData();
     fd.append('title', inputs.title);
-    fd.append('description', inputs.description);
+    fd.append('description', jDescription ? jDescription: '');
     fd.append('file', {uri: file.uri, name: filename, type});
-    fd.append('location',inputs.location)
-    fd.append('price',inputs.price)
-
 
     console.log('FD:', fd);
 
@@ -86,6 +108,45 @@ const useUploadForm = () => {
     }
   };
 
+  const handleDescriptionModify = (text) => {
+    description = {
+      ...description,
+      description: text,
+    }
+
+    setInputs((inputs) =>
+        ({
+          ...inputs,
+          description: JSON.stringify(description)
+        }));
+
+  };
+  const handleLocationModify = (text) => {
+    description = {
+      ...description,
+      location: text,
+    };
+    setInputs((inputs) =>
+        ({
+          ...inputs,
+          description: JSON.stringify(description)
+        }));
+
+  };
+  const handlePriceModify = (text) => {
+    description = {
+      ...description,
+      price: text,
+    }
+    setInputs((inputs) =>
+        ({
+          ...inputs,
+          description: JSON.stringify(description)
+
+        }));
+  };
+
+
   const handleModify = async (id, navigation, setMedia) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -113,11 +174,16 @@ const useUploadForm = () => {
     handleModify,
     handlePriceChange,
     handleLocationChange,
+    handleDescriptionModify,
+    handleLocationModify,
+    handlePriceModify,
     inputs,
     errors,
     loading,
     setErrors,
     setInputs,
+    description,
+    resetDescription,
   };
 };
 

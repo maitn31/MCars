@@ -10,9 +10,8 @@ import {Button, Text} from 'native-base'
 const width = Dimensions.get("window").width;
 const ListItem = props => {
   const {singleMedia, mode, getMedia, navigation} = props;
-  const { description, thumbnails} = singleMedia;
+  const { title,description,file_id, thumbnails} = singleMedia;
   const [open, setOpen] = useState(false);
-  
   return (
     <TouchableOpacity
       style={(mode === "myfiles" || mode === "search") ? styles.columnContainer : styles.wrapContainer}
@@ -73,13 +72,13 @@ const ListItem = props => {
       <View style={(mode === "myfiles" || mode === "search") ? {flexDirection: "row", justifyContent: "space-between"} : {}}>
         <View style={{marginVertical: 3}}>
           <Text numberOfLines={1} style={(mode === "myfiles" || mode === "search") ? {...styles.title2} : {...styles.title1, color: "#9E6969"}} numberOfLines={1}>
-            Helsinki
+            {singleMedia.title}
           </Text>
           <Text numberOfLines={1} style={(mode === "myfiles" || mode === "search") ? {...styles.subtitle2} : {...styles.subtitle1}} numberOfLines={1}>
-            Toyota
+            {JSON.parse(singleMedia.description).description}
           </Text>
           {(mode !== "myfiles" && mode !== "search") &&
-            <Text>2000 € </Text>
+            <Text>{JSON.parse(singleMedia.description).price} € </Text>
           }
         </View>
       </View>

@@ -20,16 +20,12 @@ const App = () => {
 
     if (!fontReady) {
         console.log('Waiting for fonts...');
-        return ( <
-            Expo.AppLoading / >
+        return ( <Expo.AppLoading />
         );
     }
-    return ( <
-        MediaProvider >
-        <
-        Navigator / >
-        <
-        /MediaProvider>
+    return ( <MediaProvider>
+        <Navigator />
+        </MediaProvider>
     );
 };
 
