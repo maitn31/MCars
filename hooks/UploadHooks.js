@@ -12,8 +12,7 @@ const useUploadForm = () => {
         }
     }
 
-    const [description, setDescription] = useState({});
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({data});
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -31,44 +30,38 @@ const useUploadForm = () => {
             }));
     };
 
-    const handleDescriptionChange = (text) => {
-
-        setDescription((description) =>
-            ({
-                ...description,
-                description: text,
-            }))
-        setInputs((inputs) =>
-            ({
-                ...inputs,
-                description: description
-            }));
-    };
-
     const handleLocationChange = (text) => {
-        setDescription((description) =>
-            ({
-                ...description,
-                location: text,
-            }))
         setInputs((inputs) =>
             ({
                 ...inputs,
-                description: description
+                info: {
+                    ...inputs.info,
+                    location: text
+                }
             }));
+
     };
 
     const handlePriceChange = (text) => {
-        setDescription((description) =>
-            ({
-                ...description,
-                price: text,
-            }))
         setInputs((inputs) =>
             ({
                 ...inputs,
-                description: description
+                info: {
+                    ...inputs.info,
+                    price: text
+                }
             }));
+    };
+    const handleDescriptionChange = (text) => {
+        setInputs((inputs) =>
+            ({
+                ...inputs,
+                info: {
+                    ...inputs.info,
+                    description: text
+                }
+            }));
+
     };
 
     const handleUpload = async (file, navigation, setMedia) => {
@@ -80,11 +73,10 @@ const useUploadForm = () => {
             type = 'image/jpeg';
         }
 
-        const jDescription = JSON.stringify(description);
 
         const fd = new FormData();
         fd.append('title', inputs.title);
-        fd.append('description', jDescription ? jDescription : '');
+        fd.append('description', JSON.stringify(inputs.info));
         fd.append('file', {uri: file.uri, name: filename, type});
 
         console.log('FD:', fd);
@@ -117,50 +109,13 @@ const useUploadForm = () => {
         }
     };
 
-    const handleDescriptionModify = (text) => {
-        description = {
-            ...description,
-            description: text,
-        }
-
-        setInputs((inputs) =>
-            ({
-                ...inputs,
-                description: JSON.stringify(description)
-            }));
-
-    };
-    const handleLocationModify = (text) => {
-        description = {
-            ...description,
-            location: text,
-        };
-        setInputs((inputs) =>
-            ({
-                ...inputs,
-                description: JSON.stringify(description)
-            }));
-
-    };
-    const handlePriceModify = (text) => {
-        description = {
-            ...description,
-            price: text,
-        }
-        setInputs((inputs) =>
-            ({
-                ...inputs,
-                description: JSON.stringify(description)
-
-            }));
-    };
-
 
     const handleModify = async (id, navigation, setMedia) => {
         try {
             const token = await AsyncStorage.getItem('userToken');
-
-            const resp = await fetchPUT('media', id, inputs, token);
+            const {title, info} = inputs;
+            const curInputs = {title: title, description: JSON.stringify(info)};
+            const resp = await fetchPUT('media', id, curInputs, token);
             console.log('upl resp', resp);
             if (resp.message) {
                 const data = await getUserMedia(token);
@@ -168,6 +123,13 @@ const useUploadForm = () => {
                     ({
                         ...media,
                         myFiles: data,
+                    }));
+                setLoading(false);
+                const homeData = await getAllMedia();
+                setMedia((media) =>
+                    ({
+                        ...media,
+                        allFiles: homeData,
                     }));
                 setLoading(false);
                 navigation.pop();
@@ -180,19 +142,15 @@ const useUploadForm = () => {
     return {
         handleTitleChange,
         handleDescriptionChange,
-        handleUpload,
-        handleModify,
         handlePriceChange,
         handleLocationChange,
-        handleDescriptionModify,
-        handleLocationModify,
-        handlePriceModify,
+        handleUpload,
+        handleModify,
         inputs,
         errors,
         loading,
         setErrors,
         setInputs,
-        description,
         resetDescription,
     };
 };
