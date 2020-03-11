@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4c85ae72-342b-48c1-8917-a8a13a2476fe" name="Default Changelist" comment="mostly done, 2 features left">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hooks/UploadHooks.js" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/UploadHooks.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
