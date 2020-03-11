@@ -28,16 +28,20 @@ const Modify = (props) => {
   const [media, setMedia] = useContext(MediaContext);
   const [send, setSend] = useState(false);
 
-  const {
+  let {
     handleTitleChange,
     handleDescriptionChange,
     handleModify,
+    handleLocationChange,
+    handlePriceChange,
     inputs,
     errors,
     setErrors,
     setInputs,
     loading,
   } = useUploadForm();
+
+
 
   const validationProperties = {
     title: {title: inputs.title},
@@ -55,14 +59,19 @@ const Modify = (props) => {
       }));
   };
 
+
   const file = props.navigation.state.params.file;
+  const fileInfo= JSON.parse(file.description);
+  console.log("origin file", file);
+  console.log("file description parsed", fileInfo);
+
 
   useEffect(() => {
     setInputs((inputs) =>
       ({
         ...inputs,
         title: file.title,
-        description: file.description,
+        description: fileInfo,
       }));
   }, []);
 
@@ -74,6 +83,16 @@ const Modify = (props) => {
   const handleDescription = (text) => {
     handleDescriptionChange(text);
     validate('description', text);
+  };
+
+  const handleLocation = (text) => {
+    handleLocationChange(text);
+    validate('location', text);
+  };
+
+  const handlePrice = (text) => {
+    handlePriceChange(text);
+    validate('price', text);
   };
 
   const modify = () => {
@@ -119,6 +138,23 @@ const Modify = (props) => {
               error={errors.description}
             />
           </Item>
+          <Item>
+            <FormTextInput
+                placeholder='Location'
+                onChangeText={handleLocation}
+                value={inputs.location}
+                error={errors.location}
+            />
+          </Item>
+          <Item>
+            <FormTextInput
+                placeholder='Price'
+                onChangeText={handlePrice}
+                value={inputs.price}
+                error={errors.price}
+            />
+          </Item>
+
           {file.media_type === 'image' ? (
               <AsyncImage
                 style={{
