@@ -7,6 +7,7 @@ import {
   Text,
   Body,
   Button,
+  Image,
   Icon,
 } from 'native-base';
 import {AsyncStorage} from 'react-native';
@@ -32,7 +33,7 @@ const Profile = (props) => {
       console.log('avpic', avatarPic);
       let avPic = '';
       if (avatarPic.length === 0) { // if avatar is not set
-        avPic = 'https://placekitten.com/1024/1024';
+        avPic = 'https://pngimage.net/wp-content/uploads/2018/06/no-profile-image-png.png';
       } else {
         avPic = mediaURL + avatarPic[0].filename;
       }
@@ -58,6 +59,19 @@ const Profile = (props) => {
   console.log('ava', mediaURL + user.avatar);
   return (
     <Container>
+        <CardItem>
+          <Body>
+            <AsyncImage
+              style={{
+                width: '100%',
+                height: deviceHeight / 2,
+              }}
+              spinnerColor='#777'
+              source={{uri: user.avatar}}
+            />
+          </Body>
+        </CardItem>
+      
       <Content>
         <Card>
           <CardItem header bordered>
@@ -75,7 +89,15 @@ const Profile = (props) => {
                 source={{uri: user.avatar}}
               />
             </Body>
+            
           </CardItem>
+            <Button 
+            full 
+            style={{ backgroundColor:'white'}}
+            onPress={() => {props.navigation.push("ChangeAvatar");}}
+            >
+              <Icon style={{color: '#50514F', fontSize:40}} name="camera"></Icon>
+            </Button>
           <CardItem>
             <Body>
               <Text>Fullname: {user.userdata.full_name}</Text>

@@ -19,7 +19,7 @@ const ListItem = props => {
         if (open) {
           setOpen(!open);
         }
-        navigation.push("Single", {file: singleMedia});
+        navigation.push("Car", {file: singleMedia});
       }}
       onLongPress={() => {
         if (mode === "myfiles") {

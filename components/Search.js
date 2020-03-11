@@ -1,79 +1,83 @@
 import React, {useState} from "react";
 import {Icon} from "native-base";
-import {TextInput, StyleSheet, View, Dimensions} from "react-native";
-import {Button, Text} from 'native-base'
+// import {Icon} from "react-native-elements";
+import {TextInput, StyleSheet, View, Button} from "react-native";
 
-const deviceHeight = Dimensions.get("window").height;
-
-const Search = props => {
-  const placeholder = `Try 'Toyota' `;
+const Search
+ = props => {
   const [input, setInput] = useState("");
   return (
-    <View style={styles.container}>
-      <View style={styles.item}>
-        <View style={styles.icon}>
-          <Icon active name="ios-search" />
-        </View>
-        <View style={styles.itemRight}>
-          <TextInput
-            style={styles.textInput}
-            placeholder={placeholder}
+    <>
+    <View style={styles.searchInput}>
+        <Icon
+        name='ios-search' 
+        size={22} 
+        style={styles.searchIcon} 
+        color='#bbb'
+        />
+        <View>
+            <TextInput 
+            style={styles.inputText}
+            placeholder={'I\'m looking for...'}
+            placeholderTextColor={'#999'}
+            underlineColorAndroid={'#fff'}
+            autoCorrect={false}
             onChangeText={e => {
-              setInput(e);
+                setInput(e);
             }}
             value={input}
-          />
-
-          <Button transparent
-            disabled={input === "" ? true : false}
-            onPress={() => {
-              props.navigation.push("SearchPage", {input: input});
-              setInput("")
-            }}
-          >
-            <Text style={{color: input === '' ? "grey" : "#38A5E7"}}>Search</Text>
-          </Button>
-
+            />
         </View>
-      </View>
     </View>
+    <View style = {styles.submitBtn}>
+        <Button disabled={input === "" ? true : false}
+        title={"Search"}
+        onPress={() => {
+            props.navigation.push("SearchPage", {input: input});
+        }}
+        >
+        </Button>
+    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    alignContent: "center",
-    marginTop: 10
-  },
-  item: {
-    backgroundColor: "white",
-    marginHorizontal: 20,
-    marginVertical: 10,
-    shadowOffset: {width: 0, height: 0},
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    height: deviceHeight / 20,
-    flexDirection: "row",
-    borderWidth: 0.2,
-    borderRadius: 10,
-    borderColor: "grey",
-    alignContent: "center",
-    alignItems: "center",
-    zIndex: 3
-  },
-  itemRight: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "88%",
-    marginHorizontal: 2,
-  },
-  icon: {
-    paddingHorizontal: 10,
-    width: "12%",
-  },
+ 
   textInput: {
     width: "60%"
-  }
+  },
+  searchContainer: {
+    zIndex: 99,
+    backgroundColor: '#597fab',
+    width: '100%',
+    overflow: 'hidden',
+  },
+  searchInput: {
+    backgroundColor: '#fff',
+    borderRadius: 3,
+    height: 45,
+    marginTop: 3,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  submitBtn: {
+    borderRadius: 3,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  searchIcon: {
+    position: 'absolute',
+    left: 13,
+    top: 8,
+  },
+  inputText: {
+    marginTop: 8,
+    marginLeft: 43,
+    fontSize: 20,
+    color: '#999',
+  },
 });
 
 export default Search;

@@ -3,13 +3,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView} from "react-native-gesture-handler";
 import ListItem from './ListItem';
 import {MediaContext} from '../contexts/MediaContext';
-import {getAllMedia, getUserMedia} from '../hooks/APIHooks';
+import {getAllMedia, getFavoriteMedia, getUserMedia} from '../hooks/APIHooks';
 import PropTypes from 'prop-types';
 import {AsyncStorage, StyleSheet, View, Text} from 'react-native';
 import {Spinner} from "native-base";
-import Search from './Search';
-import Banner from './Banner';
-
+import Banners from './Banners';
+import Header from './Header';
 
 const List = (props) => {
   const [media, setMedia] = useContext(MediaContext);
@@ -24,10 +23,11 @@ const List = (props) => {
       const allData = await getAllMedia();
       const token = await AsyncStorage.getItem('userToken');
       const myData = await getUserMedia(token);
-      const searchList= allData.filter(item=> (item.title.toUpperCase() === keySearch || JSON.parse(item.description).description.toUpperCase()===keySearch));
+      const favoriteMedia = await getFavoriteMedia(token);
       setMedia({
         allFiles: allData.reverse(),
         myFiles: myData,
+        favoriteMedia: favoriteMedia,
         searchList: searchList,
       });
       setLoading(false);
@@ -35,6 +35,10 @@ const List = (props) => {
       console.log(e.message);
     }
   };
+  let searchList;
+  if (props.mode === "search") {
+    searchList = media.allFiles.filter(item =>  (item.title.toUpperCase().includes(keySearch.toUpperCase()) || JSON.parse(item.description).description.toUpperCase().includes(keySearch.toUpperCase())));
+  }
 
   useEffect(() => {
     getMedia(props.mode);
@@ -48,7 +52,7 @@ const List = (props) => {
           <>
             {props.mode === "all" && (
               <ScrollView>
-                <Banner navigation={props.navigation} />
+                <Banners navigation={props.navigation} />
                 <Text style={{marginHorizontal:20, fontSize:30, fontWeight:"700"}}>Welcome to CarsDream!</Text>
                 <Text style={{marginHorizontal:20, fontSize:15, fontStyle:"italic"}}>List of new cars in month!</Text>
                 <View style={styles.wrapContainer}>
@@ -81,8 +85,27 @@ const List = (props) => {
             }
             {props.mode === "search" && (
               <ScrollView>
+                <Header title={`Related to "${keySearch}" :`} subtitle={searchList.length > 0 ? null : "There's nothing match your search!"} count={searchList.length > 0 ? searchList.length : null} />
+                {searchList.length > 1}
                 <View style={styles.columnContainer}>
                   {media.searchList.map((item, index) => (
+                    <ListItem
+                      key={index}
+                      navigation={props.navigation}
+                      singleMedia={item}
+                      mode={props.mode}
+                      getMedia={getMedia}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+            )}
+            {props.mode === "saved" && (
+              <ScrollView>
+                <Header title={media.favoriteMedia.length > 0 ? null : "You didn't save anything!"} count={media.favoriteMedia.length > 0 ? media.favoriteMedia.length : null} />
+                {media.favoriteMedia.length > 1}
+                <View style={styles.columnContainer}>
+                  {media.favoriteMedia.map((item, index) => (
                     <ListItem
                       key={index}
                       navigation={props.navigation}

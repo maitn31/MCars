@@ -93,7 +93,7 @@ const Login = (props) => {
   return (
     <Container>
       <Header>
-        <Body><Title>MyApp</Title></Body>
+        <Body><Title>M-car</Title></Body>
       </Header>
       <Content>
         {/* login form */}

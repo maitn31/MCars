@@ -5,43 +5,46 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
-import Single from '../views/Single';
+import Car from '../views/Car';
 import AuthLoading from '../views/AuthLoading';
 import Login from '../views/Login';
 import Upload from '../views/Upload';
+import Saved from "../views/Saved";
 import {Icon} from 'native-base';
 import MyFiles from '../views/MyFiles';
 import Modify from '../views/Modify';
 import SearchPage from '../views/SearchPage';
+import ChangeAvatar from "../views/ChangeAvatar";
 
 const TabNavigator = createBottomTabNavigator(
   {
     Home,
     Profile,
+    Saved,
     Upload,
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: () => {
+      tabBarIcon: ({focused, color}) => {
         const {routeName} = navigation.state;
         let iconName;
         if (routeName === 'Home') {
-          iconName = 'home';
+          iconName = 'ios-home';
         } else if (routeName === 'Profile') {
           iconName = 'person';
         } else if (routeName === 'Upload') {
-          iconName = 'add';
+          iconName = 'ios-add-circle';
+        } else if (routeName === 'Saved') {
+          iconName = 'bookmark';
         }
 
         // You can return any component that you like here!
-        return <Icon
-          name={iconName}
-          size={25}
-        />;
+        return <Icon name={iconName} size={28} style={{color: focused ? '#000' : '#d1cece'}} color={color}/>;
       },
     }),
     tabBarOptions: {
       activeTintColor: '#000',
+      inactiveTintColor: '#d1cece',
     },
   },
 );
@@ -67,8 +70,8 @@ const StackNavigator = createStackNavigator(
         headerLeft: () => {}, // this will hide back button
       },
     },
-    Single: {
-      screen: Single,
+    Car: {
+      screen: Car,
     },
     MyFiles: {
       screen: MyFiles,
@@ -81,6 +84,9 @@ const StackNavigator = createStackNavigator(
     },
     SearchPage: {
       screen: SearchPage
+    },
+    ChangeAvatar: {
+      screen: ChangeAvatar
     },
   },
 );

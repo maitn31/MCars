@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
 import {
   Container,
   Content,
@@ -10,21 +9,23 @@ import {
   H3,
   Icon,
   Text,
+  View,
+  Button
 } from 'native-base';
 import PropTypes from 'prop-types';
 import AsyncImage from '../components/AsyncImage';
 import {Dimensions, StyleSheet} from 'react-native';
 import {mediaURL} from '../constants/urlConst';
 import {Video} from 'expo-av';
-import {fetchGET} from '../hooks/APIHooks';
+import { fetchDELETE, fetchGET, fetchPOST, getFavoriteMedia } from '../hooks/APIHooks';
 import {AsyncStorage} from 'react-native';
-
 const deviceHeight = Dimensions.get('window').height;
 
-const Single = (props) => {
+const Car = (props) => {
   const [user, setUser] = useState({});
   const {navigation} = props;
   const file = navigation.state.params.file;
+  const [saved, setSaved] = useState(undefined);
 
   const getUser = async () => {
     try {
@@ -35,9 +36,54 @@ const Single = (props) => {
       console.log('getUser error', e);
     }
   };
+  const checkSaved = async () => {
+    try {
+      const savedLists = await fetchGET('favourites/file', file.file_id);
+      savedLists.filter(item => item.user_id === file.user_id);
+      console.log('saved', savedLists);
+      if (savedLists.length !== 0) {
+        setSaved(true);
+      } else {
+        setSaved(false);
+      }
+    } catch (e) {
+      console.log('checkSaved error', e);
+    }
+  };
+
+  const toggleSaved = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    if (!saved) {
+      try {
+        const json = await fetchPOST('favourites', {file_id: file.file_id}, token);
+        console.log('Save', json);
+        if (json.favourite_id) {
+          setSaved(true);
+        }
+      } catch (e) {
+        console.log('saving error', e);
+      }
+    } else if (saved) {
+      try {
+        const json = await fetchDELETE('favourites/file', file.file_id, token);
+        console.log('Unsave', json);
+        if (json.message.includes('deleted')) {
+          setSaved(false);
+        }
+      } catch (e) {
+        console.log('unsaving error', e);
+      }
+    }
+    const favouriteMedia = await getFavoriteMedia(token);
+    setMedia((media) => ({
+      ...media,
+      favouriteMedia: favouriteMedia,
+    }))
+  };
 
   useEffect(() => {
     getUser();
+    checkSaved();
   }, []);
 
   return (
@@ -71,6 +117,13 @@ const Single = (props) => {
               />
               )
             }
+            {saved !== undefined &&
+              <View style={styles.saveArea}>
+                <Button rounded light onPress={toggleSaved}>
+                  <Icon style={saved ? styles.svIcon : styles.unsvIcon} name={'bookmark'} />
+                </Button>
+              </View>
+            }
           </CardItem>
         </Card>
         <Card>
@@ -78,8 +131,8 @@ const Single = (props) => {
             <Left>
               <Icon name='car'/>
               <Body>
-                <H3 style={styles.title}>{file.title}</H3>
-                <Text style={styles.subtitle2}>{JSON.parse(file.description).location}</Text>
+                <H3 style={styles.title}>  {file.title.toUpperCase()}</H3>
+                <Text style={styles.subtitle2}>  {JSON.parse(file.description).location.toUpperCase()}</Text>
               </Body>
             </Left>
           </CardItem>
@@ -137,11 +190,22 @@ const styles = StyleSheet.create({
     zIndex: 4,
     borderWidth: 0.4,
     opacity: 1,
-  }
+  },
+  saveArea: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+  },
+  unsvIcon: {
+    color: '#000'
+  },
+  svIcon: {
+    color: '#a83f39',
+  },
 });
-Single.propTypes = {
+Car.propTypes = {
   navigation: PropTypes.object,
   file: PropTypes.object,
 };
 
-export default Single;
+export default Car;

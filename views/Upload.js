@@ -1,17 +1,7 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {
-    Content,
-    Form,
-    Button,
-    Text,
-    Item,
-    Spinner,
-} from 'native-base';
+import React, {useContext, useEffect, useState} from 'react';
+import {Button, Content, Form, Item, Spinner, Text, } from 'native-base';
 
-import {
-    Dimensions,
-    Image,
-} from 'react-native';
+import {Dimensions, Image, } from 'react-native';
 import PropTypes from 'prop-types';
 import FormTextInput from '../components/FormTextInput';
 import * as ImagePicker from 'expo-image-picker';
@@ -25,181 +15,195 @@ import {uploadConstraints} from '../constants/validationConst';
 const deviceHeight = Dimensions.get('window').height;
 
 const Upload = (props) => {
-    const [media, setMedia] = useContext(MediaContext);
-    const [image, setImage] = useState(null);
-    const [send, setSend] = useState(false);
+  const [media, setMedia] = useContext(MediaContext);
+  const [image, setImage] = useState(null);
+  const [send, setSend] = useState(false);
 
-    const {
-        handleTitleChange,
-        handleDescriptionChange,
-        handlePriceChange,
-        handleLocationChange,
-        handleUpload,
-        inputs,
-        errors,
-        setErrors,
-        setInputs,
-        loading,
-    } = useUploadForm();
+  let {
+    handleTitleChange,
+    handleDescriptionChange,
+    handleLocationChange,
+    handleCapacityChange,
+    handlePriceChange,
+    handleUpload,
+    description,
+    inputs,
+    errors,
+    setErrors,
+    setInputs,
+    loading,
+    resetDescription
+  } = useUploadForm();
 
-    const validationProperties = {
-        title: {title: inputs.title},
-        description: {description: inputs.description},
-    };
+  const validationProperties = {
+    title: {title: inputs.title},
+    description: {description: inputs.description},
+  };
 
-    const validate = (field, value) => {
-        console.log('vp', validationProperties[field]);
-        setErrors((errors) =>
-            ({
-                ...errors,
-                [field]: validateField({[field]: value},
-                    uploadConstraints),
-                fetch: undefined,
-            }));
-    };
+  const validate = (field, value) => {
+    console.log('vp', validationProperties[field]);
+    setErrors((errors) =>
+      ({
+        ...errors,
+        [field]: validateField({[field]: value},
+          uploadConstraints),
+        fetch: undefined,
+      }));
+  };
 
-    const reset = () => {
-        setErrors({});
-        setInputs({});
-        setImage(null);
-    };
+  const reset = () => {
+    setErrors({});
+    setInputs({});
+    setImage(null);
+    resetDescription(description)
+  };
 
-    const getPermissionAsync = async () => {
-        if (Constants.platform.ios) {
-            const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
+  const getPermissionAsync = async () => {
+
+    if (Constants.platform.ios) {
+      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+
+  useEffect(() => {
+    getPermissionAsync();
+  }, []);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.3,
+      exif: true,
+    });
+    if (!result.cancelled) {
+      setImage(result);
+    }
+  };
+
+  const handleTitle = (text) => {
+    handleTitleChange(text);
+    validate('title', text);
+  };
+
+  const handleDescription = (text) => {
+    handleDescriptionChange(text);
+    // validate('description', text);
+  };
+  const handleLocation = (text) => {
+    handleLocationChange(text);
+    // validate('description', text);
+  };
+  const handleCapacity = (text) => {
+    handleCapacityChange(text);
+    // validate('description', text);
+  };
+  const handlePrice = (text) => {
+    handlePriceChange(text);
+    // validate('description', text);
+  };
+
+  const upload = () => {
+    console.log('reg field errors', errors);
+    handleUpload(image, props.navigation, setMedia);
+    reset();
+  };
+
+  const checkErrors = () => {
+    console.log('errors', errors);
+    if (errors.title !== undefined ||
+      errors.description !== undefined) {
+      setSend(false);
+    } else {
+      setSend(true);
+    }
+  };
+
+  useEffect(() => {
+    checkErrors();
+  }, [errors]);
+  console.log('send', send);
+
+  return (
+    <Content>
+      {loading ? (
+        <Spinner />
+      ) : (
+          <Form>
+            <Item>
+              <FormTextInput
+                placeholder='Title'
+                onChangeText={handleTitle}
+                value={inputs.title}
+                error={errors.title}
+              />
+            </Item>
+
+            <Item>
+              <FormTextInput
+                placeholder='Location'
+                onChangeText={handleLocation}
+                value={description.location}
+                error={errors.description}
+              />
+            </Item>
+            <Item>
+              <FormTextInput
+                placeholder='Capacity'
+                onChangeText={handleCapacity}
+                value={description.capacity}
+                error={errors.description}
+              />
+            </Item>
+
+            <Item>
+              <FormTextInput
+                placeholder='Price'
+                onChangeText={handlePrice}
+                value={description.price}
+                error={errors.description}
+              />
+            </Item>
+
+            <Item>
+              <FormTextInput
+                placeholder='Description'
+                onChangeText={handleDescription}
+                value={description.description}
+                error={errors.description}
+              />
+            </Item>
+            {image &&
+              <Image source={{uri: image.uri}}
+                style={{width: '100%', height: deviceHeight / 3}} />
             }
-        }
-    };
-
-    useEffect(() => {
-        getPermissionAsync();
-    }, []);
-
-    const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 0.3,
-            exif: true,
-        });
-
-        console.log(result);
-
-        if (!result.cancelled) {
-            setImage(result);
-        }
-    };
-
-    const handleTitle = (text) => {
-        handleTitleChange(text);
-        validate('title', text);
-    };
-
-    const handleDescription = (text) => {
-        handleDescriptionChange(text);
-        validate('description', text);
-    };
-
-    const handleLocation = (text) => {
-        handleLocationChange(text);
-        validate('location', text);
-    };
-
-    const handlePrice = (text) => {
-        handlePriceChange(text);
-        validate('price', text);
-    };
-
-    const upload = () => {
-        console.log('reg field errors', errors);
-        handleUpload(image, props.navigation, setMedia);
-        reset();
-    };
-
-    const checkErrors = () => {
-        console.log('errors', errors);
-        if (errors.title !== undefined ||
-            errors.description !== undefined) {
-            setSend(false);
-        } else {
-            setSend(true);
-        }
-    };
-
-    useEffect(() => {
-        checkErrors();
-    }, [errors]);
-
-    console.log('send', send);
-
-    return (
-        <Content>
-            {loading ? (
-                <Spinner/>
-            ) : (
-                <Form>
-                    <Item>
-                        <FormTextInput
-                            placeholder='Title'
-                            onChangeText={handleTitle}
-                            value={inputs.title}
-                            error={errors.title}
-                        />
-                    </Item>
-                    <Item>
-                        <FormTextInput
-                            placeholder='Description'
-                            onChangeText={handleDescription}
-                            value={inputs.description}
-                            error={errors.description}
-                        />
-                    </Item>
-                    <Item>
-                        <FormTextInput
-                            placeholder='Location'
-                            onChangeText={handleLocation}
-                            value={inputs.location}
-                            error={errors.location}
-                        />
-                    </Item>
-                    <Item>
-                        <FormTextInput
-                            placeholder='Price'
-                            onChangeText={handlePrice}
-                            value={inputs.price}
-                            error={errors.price}
-                        />
-                    </Item>
-                    {image &&
-                    <Image source={{uri: image.uri}}
-                           style={{width: '100%', height: deviceHeight / 3}}/>
-                    }
-                    <Button full onPress={pickImage}>
-                        <Text>Select file</Text>
-                    </Button>
-                    {image && send &&
-                    <Button full onPress={upload}>
-                        <Text>Upload</Text>
-                    </Button>
-                    }
-                    <Button
-                        dark
-                        full
-                        onPress={reset}>
-                        <Text>Reset form</Text>
-                    </Button>
-                </Form>
-            )}
-        </Content>
-    );
+            <Button full onPress={pickImage}>
+              <Text>Select file</Text>
+            </Button>
+            {image && send &&
+              <Button full onPress={upload}>
+                <Text>Upload</Text>
+              </Button>
+            }
+            <Button
+              dark
+              full
+              onPress={reset}>
+              <Text>Reset form</Text>
+            </Button>
+          </Form>
+        )}
+    </Content>
+  );
 };
 
 // proptypes here
 Upload.propTypes = {
-    navigation: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default Upload;

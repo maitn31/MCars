@@ -1,11 +1,11 @@
 import React from 'react'
-import {View, Text, ListView, Image, Dimensions} from 'react-native'
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Image, Dimensions} from 'react-native'
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 
 const width = Dimensions.get("window").width;
 
-const Banner = (props) => {
+const Banners = (props) => {
     const logos = [
         {link: "https://global.toyota/pages/global_toyota/mobility/toyota-brand/emblem_001.jpg", brand:"Toyota"},
         {link: "https://pictures.dealer.com/j/jimellisaudiatlantaaoa/1047/70e485452c868b71f14cd5e1286ed574x.jpg", brand: "Audi"},
@@ -37,4 +37,4 @@ const Banner = (props) => {
     )
 }
 
-export default Banner
+export default Banners
