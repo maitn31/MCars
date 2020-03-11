@@ -16,11 +16,6 @@ const useUploadForm = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const resetDescription = (object) => {
-        object.description = "";
-        object.location = "";
-        object.price = "";
-    }
 
     const handleTitleChange = (text) => {
         setInputs((inputs) =>
