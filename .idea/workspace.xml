@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c85ae72-342b-48c1-8917-a8a13a2476fe" name="Default Changelist" comment="mostly done, 2 features left">
-      <change beforePath="$PROJECT_DIR$/components/Banner.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Banner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/List.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/List.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/views/Upload.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,6 +63,7 @@
       <workItem from="1583786029804" duration="9608000" />
       <workItem from="1583833115028" duration="5902000" />
       <workItem from="1583844918274" duration="9797000" />
+      <workItem from="1583971107950" duration="3010000" />
     </task>
     <servers />
   </component>

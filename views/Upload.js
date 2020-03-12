@@ -92,19 +92,16 @@ const Upload = (props) => {
 
   const handleDescription = (text) => {
     handleDescriptionChange(text);
-    // validate('description', text);
+    validate('description', text);
   };
   const handleLocation = (text) => {
     handleLocationChange(text);
-    // validate('description', text);
+    validate('location', text);
   };
-  const handleCapacity = (text) => {
-    handleCapacityChange(text);
-    // validate('description', text);
-  };
+
   const handlePrice = (text) => {
     handlePriceChange(text);
-    // validate('description', text);
+    validate('price', text);
   };
 
   const upload = () => {
@@ -148,14 +145,6 @@ const Upload = (props) => {
                 placeholder='Location'
                 onChangeText={handleLocation}
                 value={description.location}
-                error={errors.description}
-              />
-            </Item>
-            <Item>
-              <FormTextInput
-                placeholder='Capacity'
-                onChangeText={handleCapacity}
-                value={description.capacity}
                 error={errors.description}
               />
             </Item>

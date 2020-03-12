@@ -15,7 +15,9 @@ const List = (props) => {
   const [loading, setLoading] = useState(true);
 
   const keySearch=props.keySearch;
-
+  const isAvatar = async (file) => {
+    return file.filter(item => item.description !== "");
+  };
 
   const getMedia = async (mode) => {
     try {
@@ -23,10 +25,11 @@ const List = (props) => {
       const allData = await getAllMedia();
       const token = await AsyncStorage.getItem('userToken');
       const myData = await getUserMedia(token);
+      const myFile = await isAvatar(myData);
       const favoriteMedia = await getFavoriteMedia(token);
       setMedia({
         allFiles: allData.reverse(),
-        myFiles: myData,
+        myFiles: myFile,
         favoriteMedia: favoriteMedia,
         searchList: searchList,
       });
