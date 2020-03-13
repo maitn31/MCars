@@ -84,7 +84,7 @@ const useUploadForm = () => {
 
             const tagData = {
                 file_id: resp.file_id,
-                tag: 'MCAR',
+                tag: 'mcar',
             };
 
             const result = await fetchPOST('tags', tagData, token);

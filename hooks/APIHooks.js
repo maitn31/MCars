@@ -95,7 +95,7 @@ const fetchFormData = async (
 };
 
 const getAllMedia = async () => {
-  const json = await fetchGET('tags/sellcar');
+  const json = await fetchGET('tags/mcar');
   console.log("API HOOKS", json);
   const result = await Promise.all(json.map(async (item) => {
     return await fetchGET('media', item.file_id);
