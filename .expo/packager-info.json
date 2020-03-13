@@ -1,9 +1,9 @@
 {
-  "devToolsPort": 19002,
+  "devToolsPort": 19003,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 11872,
-  "expoServerNgrokUrl": "https://fc-89j.anonymous.renmai-master.exp.direct",
-  "packagerNgrokUrl": "https://packager.fc-89j.anonymous.renmai-master.exp.direct",
-  "ngrokPid": 15040
+  "packagerPort": 19004,
+  "packagerPid": 16612,
+  "expoServerNgrokUrl": "https://u5-x3i.anonymous.renmai-master.exp.direct",
+  "packagerNgrokUrl": "https://packager.u5-x3i.anonymous.renmai-master.exp.direct",
+  "ngrokPid": 16596
 }

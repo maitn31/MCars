@@ -26,8 +26,7 @@ const List = (props) => {
       const allData = await getAllMedia();
       const token = await AsyncStorage.getItem('userToken');
       const allMyData = await getUserMedia(token);
-      console.log("user id",allData[0].user_id);
-      const myFilesData = allData.filter(item => (item.user_id= allMyData[0].user_id));
+      const myFilesData = allData.filter(item => (item.user_id=== allMyData[0].user_id));
       const myData = await checkAvatar(myFilesData);
       const searchList= allData.filter(item=> (item.title.toUpperCase().includes(keySearch) || JSON.parse(item.description).description.toUpperCase().includes(keySearch)));
       setMedia({
