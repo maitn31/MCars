@@ -17,13 +17,16 @@ const List = (props) => {
 
   const keySearch=props.keySearch;
 
-
+  const checkAvatar = async (file) => {
+    return file.filter(item => item.description !== "");
+  };
   const getMedia = async (mode) => {
     try {
       console.log('mode', mode);
       const allData = await getAllMedia();
       const token = await AsyncStorage.getItem('userToken');
-      const myData = await getUserMedia(token);
+      const allMyData = await getUserMedia(token);
+      const myData = await checkAvatar(allMyData);
       const searchList= allData.filter(item=> (item.title.toUpperCase() === keySearch || JSON.parse(item.description).description.toUpperCase()===keySearch));
       setMedia({
         allFiles: allData.reverse(),

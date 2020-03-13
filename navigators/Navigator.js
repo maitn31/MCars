@@ -5,7 +5,7 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
-import Single from '../views/Single';
+import Car from '../views/Car';
 import AuthLoading from '../views/AuthLoading';
 import Login from '../views/Login';
 import Upload from '../views/Upload';
@@ -76,8 +76,8 @@ const StackNavigator = createStackNavigator(
         Profile: {
             screen: Profile,
         },
-        Single: {
-            screen: Single,
+        Car: {
+            screen: Car,
         },
         MyFiles: {
             screen: MyFiles,

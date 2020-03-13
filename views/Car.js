@@ -21,7 +21,8 @@ import {AsyncStorage} from 'react-native';
 
 const deviceHeight = Dimensions.get('window').height;
 
-const Single = (props) => {
+const Car = (props) => {
+  const isHidden = true;
   const [user, setUser] = useState({});
   const {navigation} = props;
   const file = navigation.state.params.file;
@@ -35,7 +36,10 @@ const Single = (props) => {
       console.log('getUser error', e);
     }
   };
-
+  // const showInfo(checkInfo) =
+  //     {
+  //       checkInfo = !checkInfo;
+  //     }
   useEffect(() => {
     getUser();
   }, []);
@@ -139,9 +143,9 @@ const styles = StyleSheet.create({
     opacity: 1,
   }
 });
-Single.propTypes = {
+Car.propTypes = {
   navigation: PropTypes.object,
   file: PropTypes.object,
 };
 
-export default Single;
+export default Car;

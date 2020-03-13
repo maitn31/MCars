@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MyApp",
-    "slug": "MyApp",
+    "name": "MCar",
+    "slug": "MCar",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
