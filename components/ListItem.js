@@ -134,6 +134,8 @@ const styles = StyleSheet.create({
   }
 });
 
+
+
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
