@@ -13,87 +13,96 @@ import {Icon} from 'native-base';
 import MyFiles from '../views/MyFiles';
 import Modify from '../views/Modify';
 import SearchPage from '../views/SearchPage';
+import ChangeAvatar from "../views/ChangeAvatar";
+
 
 const TabNavigator = createBottomTabNavigator(
-  {
-    Home,
-    Profile,
-    Upload,
-  },
-  {
-    defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: () => {
-        const {routeName} = navigation.state;
-        let iconName;
-        if (routeName === 'Home') {
-          iconName = 'home';
-        } else if (routeName === 'Profile') {
-          iconName = 'person';
-        } else if (routeName === 'Upload') {
-          iconName = 'add';
-        }
-
-        // You can return any component that you like here!
-        return <Icon
-          name={iconName}
-          size={25}
-        />;
-      },
-    }),
-    tabBarOptions: {
-      activeTintColor: '#000',
+    {
+        Home,
+        Profile,
+        Upload,
     },
-  },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            tabBarIcon: () => {
+                const {routeName} = navigation.state;
+                let iconName;
+                if (routeName === 'Home') {
+                    iconName = 'home';
+                } else if (routeName === 'Profile') {
+                    iconName = 'person';
+                } else if (routeName === 'Upload') {
+                    iconName = 'add';
+                }
+
+                // You can return any component that you like here!
+                return <Icon
+                    name={iconName}
+                    size={25}
+                />;
+            },
+        }),
+        tabBarOptions: {
+            activeTintColor: '#000',
+        },
+    },
 );
 
 TabNavigator.navigationOptions = ({navigation}) => {
-  const {routeName} = navigation.state.routes[navigation.state.index];
+    const {routeName} = navigation.state.routes[navigation.state.index];
 
-  // You can do whatever you like here to pick the title based on the route name
-  const headerTitle = routeName;
+    // You can do whatever you like here to pick the title based on the route name
+    const headerTitle = routeName;
 
-  return {
-    headerTitle,
-  };
+    return {
+        headerTitle,
+    };
 };
 
 const StackNavigator = createStackNavigator(
-  // RouteConfigs
-  {
-    Home: {
-      screen: TabNavigator,
-      navigationOptions: {
-        headerMode: 'none', // this will hide the header
-        headerLeft: () => {}, // this will hide back button
-      },
+    // RouteConfigs
+    {
+        Home: {
+            screen: TabNavigator,
+            navigationOptions: {
+                headerMode: 'none', // this will hide the header
+                headerLeft: () => {
+                }, // this will hide back button
+            },
+        },
+        ChangeAvatar: {
+            screen: ChangeAvatar
+        },
+        Profile: {
+            screen: Profile,
+        },
+        Single: {
+            screen: Single,
+        },
+        MyFiles: {
+            screen: MyFiles,
+        },
+        Modify: {
+            screen: Modify,
+        },
+        Logout: {
+            screen: Login,
+        },
+        SearchPage: {
+            screen: SearchPage
+        },
     },
-    Single: {
-      screen: Single,
-    },
-    MyFiles: {
-      screen: MyFiles,
-    },
-    Modify: {
-      screen: Modify,
-    },
-    Logout: {
-      screen: Login,
-    },
-    SearchPage: {
-      screen: SearchPage
-    },
-  },
 );
 
 const Navigator = createSwitchNavigator(
-  {
-    AuthLoading: AuthLoading,
-    App: StackNavigator,
-    Auth: Login,
-  },
-  {
-    initialRouteName: 'AuthLoading',
-  },
+    {
+        AuthLoading: AuthLoading,
+        App: StackNavigator,
+        Auth: Login,
+    },
+    {
+        initialRouteName: 'AuthLoading',
+    },
 );
 
 export default createAppContainer(Navigator);

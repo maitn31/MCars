@@ -28,13 +28,13 @@ const Profile = (props) => {
     try {
       const userFromStorage = await AsyncStorage.getItem('user');
       const uData = JSON.parse(userFromStorage);
-      const avatarPic = await fetchGET('tags', 'avatar_' + uData.user_id);
-      console.log('avpic', avatarPic);
+      const profileImage = await fetchGET('tags', 'pro5pic_' + uData.user_id);
+      console.log('avpic', profileImage);
       let avPic = '';
-      if (avatarPic.length === 0) { // if avatar is not set
+      if (profileImage.length === 0) { // if avatar is not set
         avPic = 'https://placekitten.com/1024/1024';
       } else {
-        avPic = mediaURL + avatarPic[0].filename;
+        avPic = mediaURL + profileImage[0].filename;
       }
       setUser((user) => (
         {
@@ -76,6 +76,7 @@ const Profile = (props) => {
               />
             </Body>
           </CardItem>
+
           <CardItem>
             <Body>
               <Text>Fullname: {user.userdata.full_name}</Text>
@@ -84,6 +85,14 @@ const Profile = (props) => {
           </CardItem>
           <CardItem footer bordered>
             <Body>
+              <Button
+                  full
+                  style={{ backgroundColor:'white'}}
+                  onPress={() => {props.navigation.push("ChangeAvatar");}}
+              >
+                <Icon style={{color: '#50514F', fontSize:40}} name="camera"></Icon>
+              </Button>
+
               <Button full onPress={() => {
                 props.navigation.push('MyFiles');
               }}>
